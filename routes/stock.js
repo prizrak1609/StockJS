@@ -20,9 +20,23 @@ router.get('/:stockName', function (req, res, next) {
     endTime: new Date().getTime(),
     limit: 1000
   }).then(response => {
+    let array = []
+    response.data.forEach(element => {
+      const date = new Date(element[0])
+      array.push({
+        date: `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
+        open: element[1],
+        high: element[2],
+        low: element[3],
+        close: element[4],
+        volume: element[5],
+        quoteAssetVolume: element[7],
+        numberOfTrades: element[8]
+      })
+    });
     res.render("stockInfo", {
       title: `Stock ${stockName}`,
-      stock: response.data
+      stock: array
     })
   })
   .catch(err => {
